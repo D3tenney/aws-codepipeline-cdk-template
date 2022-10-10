@@ -68,7 +68,7 @@ git init
 git add -A
 git commit -m "initial commit"
 git remote add upstream <your_repo_url>
-git push upstream main:main
+git push upstream master:main
 ```
 See this [article](https://jdhao.github.io/2018/05/16/git-push-local-to-remote/).
 
