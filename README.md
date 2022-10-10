@@ -29,7 +29,10 @@ AWS CLI profiles to accomplish this.
 
 ## Code Changes
 Update the account IDs in `bin/app.ts` (for where the code pipeline will be deployed)
-and `lib/environments.ts` (for the stages). 
+and `lib/environments.ts` (for the stages).
+
+If you're deploying to multiple accounts (ie stages have different accounts),
+uncomment `crossAccountKeys: true` in `lib/pipeline.ts`
 
 ## CodeCommit
 
@@ -45,6 +48,10 @@ aws codecommit create-repository \
 Note the repo Arn and the clone urls.
 
 You'll need to update the `codeCommitRepoArn` parameter in `bin/app.ts`.
+
+Depending on whether you want to use https or ssh for git, follow setup instructions
+for [https](https://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-https-unixes.html)
+or [ssh](https://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-ssh-unixes.html).
 
 
 ## Github
@@ -63,7 +70,7 @@ git clone https://github.com/D3tenney/aws-codepipeline-cdk-template.git
 cd aws-codepipeline-cdk-template
 
 # remote setup
-rm -rf ./git
+rm -rf ./.git
 git init
 git add -A
 git commit -m "initial commit"
@@ -78,7 +85,8 @@ Run `cdk synth` to synthesize cloudformation templates. This will create the cdk
 You can review the templates in the cdk.out directory.
 
 Once you're satisfied with the changes you've made and committed and pushed them to your repo,
-run `cdk deploy AppPipeline`.
+run `cdk deploy AppPipeline`. Remember to bootstrap your environments before attempting a
+deployment.
 
 Then check CodePipelines in the AWS console in the account where you deployed your pipeline.
 You should be able to watch it build and manually approve the second stage.
