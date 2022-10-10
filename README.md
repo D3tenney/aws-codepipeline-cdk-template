@@ -25,7 +25,19 @@ and [CDK](https://docs.aws.amazon.com/cdk/v2/guide/getting_started.html).
 Create an IAM user with administrative privileges in each account. Use `aws configure` to set up
 profiles for each account so you can bootstrap and deploy into those accounts. You'll need to
 bootstrap each account with `cdk bootstrap aws://ACCOUNT_ID/REGION`. You may want to use
-AWS CLI profiles to accomplish this.
+AWS CLI profiles to accomplish this. If your pipeline will deploy into another target account,
+you'll want to bootstrap the target account with the `--trust` flag for the pipeline account.
+
+Example:
+
+```bash
+cdk bootstrap \
+aws://123456789012/us-east-1 \
+--trust 901234567890 \
+--cloudformation-execution-policies "arn:aws:iam::aws:policy/AdministratorAccess" \
+--profile dev
+```
+[CDK Bootstrapping Docs](https://docs.aws.amazon.com/cdk/v2/guide/bootstrapping.html)
 
 ## Code Changes
 Update the account IDs in `bin/app.ts` (for where the code pipeline will be deployed)
@@ -89,7 +101,7 @@ run `cdk deploy AppPipeline`. Remember to bootstrap your environments before att
 deployment.
 
 Then check CodePipelines in the AWS console in the account where you deployed your pipeline.
-You should be able to watch it build and manually approve the second stage.
+You should be able to watch it build and manually approve the prod stage.
 
 
 
